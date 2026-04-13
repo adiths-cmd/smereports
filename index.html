@@ -1,213 +1,302 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
 .db{padding:1rem 0}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:20px}
 .metric-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px}
 .metric-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
 .metric-value{font-size:26px;font-weight:500;color:var(--color-text-primary)}
 .metric-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.status-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px}
-.section-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
-.bar-wrap{margin-bottom:10px}
-.bar-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;color:var(--color-text-primary)}
+.status-bar-wrap{margin-bottom:8px}
+.status-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
 .bar-bg{height:10px;background:var(--color-background-secondary);border-radius:6px;overflow:hidden}
-.bar-fill{height:100%;border-radius:6px}
-.donut-row{display:flex;align-items:center;gap:16px;justify-content:center;padding:10px 0 2px}
-.leg-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-secondary)}
-.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.avg-wrap{position:relative;height:180px;margin-top:6px}
-.tab-row{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:14px}
-.tab-btn{padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px}
-.tab-btn.active{color:var(--color-text-primary);border-bottom:2px solid #1D9E75}
+.bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.bar-completed{background:#1D9E75}
+.bar-inprogress{background:#EF9F27}
+.donut-wrap{display:flex;align-items:center;gap:16px;justify-content:center;padding:8px 0}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-secondary)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .filters{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .filter-label{font-size:13px;color:var(--color-text-secondary)}
 select{padding:5px 10px;font-size:13px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer}
-.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
+thead th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
 tbody td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover{background:var(--color-background-secondary)}
 .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
-.badge-c{background:#E1F5EE;color:#0F6E56}
-.badge-ip{background:#FAEEDA;color:#854F0B}
-.spec-tag{display:inline-block;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:1px 6px;font-size:11px;margin:1px;color:var(--color-text-primary)}
-.avatar{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:10px;font-weight:500;background:var(--color-background-info);color:var(--color-text-info);flex-shrink:0;margin-right:6px}
-.h-bar{display:inline-block;height:6px;border-radius:3px;background:#5DCAA5;vertical-align:middle;margin-left:6px}
+.badge-completed{background:#E1F5EE;color:#0F6E56}
+.badge-inprogress{background:#FAEEDA;color:#854F0B}
+.spec-avatar{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:10px;font-weight:500;background:var(--color-background-info);color:var(--color-text-info);flex-shrink:0;margin-right:6px}
+.spec-cell{display:flex;align-items:flex-start;gap:4px;flex-wrap:wrap}
+.specialist-tag{display:inline-block;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:1px 6px;font-size:11px;margin:1px 1px;color:var(--color-text-primary)}
+.avg-chart-wrap{position:relative;height:220px;margin-top:8px}
+.tab-row{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:14px}
+.tab-btn{padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.tab-btn.active{color:var(--color-text-primary);border-bottom:2px solid #1D9E75}
+.table-wrap{overflow-x:auto}
+.hours-bar{display:inline-block;height:6px;border-radius:3px;background:#5DCAA5;vertical-align:middle;margin-left:6px}
 </style>
 
 <div class="db">
-<h2 class="sr-only">Support request dashboard showing configuration status, specialist metrics, and timeline data</h2>
+<h2 class="sr-only">DSO Q1 onboarding dashboard showing configuration status, implementation specialists, and timeline metrics</h2>
 
 <div class="metrics" id="metrics"></div>
 
-<div class="row2">
+<div class="status-row">
   <div class="card">
     <p class="section-title">Configuration status</p>
     <div id="status-bars"></div>
-    <div class="donut-row">
-      <div style="position:relative;width:100px;height:100px;flex-shrink:0">
-        <canvas id="donutChart" role="img" aria-label="Donut chart showing configuration status breakdown">All 7 records are Completed.</canvas>
+    <div class="donut-wrap" style="margin-top:12px">
+      <div style="position:relative;width:110px;height:110px;flex-shrink:0">
+        <canvas id="donutChart" role="img" aria-label="Donut chart of configuration status">All records are Completed.</canvas>
       </div>
       <div id="donut-legend" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
   </div>
   <div class="card">
     <p class="section-title">Avg completion time by specialist</p>
-    <div class="avg-wrap"><canvas id="avgChart" role="img" aria-label="Bar chart of average completion hours per specialist"></canvas></div>
+    <div class="avg-chart-wrap">
+      <canvas id="avgChart" role="img" aria-label="Bar chart of average completion hours by implementation specialist"></canvas>
+    </div>
   </div>
 </div>
 
 <div class="card">
   <div class="tab-row">
-    <button class="tab-btn active" onclick="switchTab('list',event)">All requests</button>
-    <button class="tab-btn" onclick="switchTab('specialist',event)">By specialist</button>
+    <button class="tab-btn active" onclick="switchTab('list')">All onboardings</button>
+    <button class="tab-btn" onclick="switchTab('specialist')">By specialist</button>
   </div>
-  <div id="list-filters" class="filters">
-    <span class="filter-label">Specialist:</span>
-    <select id="spec-filter" onchange="renderTable()"><option value="">All</option></select>
+  <div class="filters" id="list-filters">
+    <span class="filter-label">Filter by specialist:</span>
+    <select id="spec-filter" onchange="renderTable()"><option value="">All specialists</option></select>
     <select id="status-filter" onchange="renderTable()"><option value="">All statuses</option><option value="Completed">Completed</option><option value="In Progress">In Progress</option></select>
   </div>
   <div class="table-wrap" id="list-view">
     <table><thead><tr>
-      <th>Client</th><th>Requirement</th><th>Status</th><th>Specialist(s)</th><th>Starting date</th><th>Completion date</th><th>Time (hrs)</th><th>Requested by</th>
+      <th>Client / Account</th>
+      <th>Status</th>
+      <th>Specialist(s)</th>
+      <th>Starting date</th>
+      <th>Completion date</th>
+      <th>Time (hrs)</th>
+      <th>Market</th>
+      <th>Location</th>
     </tr></thead>
-    <tbody id="tbody"></tbody></table>
+    <tbody id="table-body"></tbody></table>
   </div>
-  <div id="spec-view" style="display:none">
+  <div id="specialist-view" style="display:none">
     <table><thead><tr>
-      <th>Specialist</th><th>Requests handled</th><th>Avg time (hrs)</th><th>Total hours</th><th>Clients</th>
+      <th>Specialist</th>
+      <th>Total onboardings</th>
+      <th>Avg time (hrs)</th>
+      <th>Total hours</th>
+      <th>Clients</th>
     </tr></thead>
-    <tbody id="spec-tbody"></tbody></table>
+    <tbody id="spec-table-body"></tbody></table>
   </div>
 </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const RAW=[
-["Completed","Achu Dev","2/26/2026 21:31:00","Active Dental","Active Dental- Configuration Update","Saptha Suresh","3/2/2026 13:46:00","88.25"],
-["Completed","Achu Dev","3/10/2026 1:09:00","Espire Dental","Espire Dental SMS Configuration","Saptha Suresh","3/10/2026 22:54:00","21.75"],
-["Completed","Milan Abraham, Achu Dev, Abishek Mohan, Karthik Mohan, Jabir R H","3/5/2026 22:11:00","1FD","Request to setup line keys_1FD","Femiya Johnson","3/6/2026 22:00:00","23.82"],
-["Completed","Karthik Mohan","3/23/2026 20:21:00","Espire Dental","Holiday Calendar","Akash Antony","3/23/2026 23:54:00","3.55"],
-["Completed","Milan Abraham, Achu Dev, Abishek Mohan, Karthik Mohan, Jabir R H, Sidhu G","3/7/2026 3:09:00","Paradigm","New Line key Configuration - OMSA","Anna Elzen Koshy","3/7/2026 21:29:00","18.33"],
-["Completed","Sidhu G","3/19/2026 23:52:00","Paradigm","DTC lines Configurations Update","Anna Elzen Koshy","3/20/2026 12:57:00","13.08"],
-["Completed","Milan Abraham, Achu Dev, Abishek Mohan, Karthik Mohan, Jabir R H","3/24/2026 3:52:00","Paradigm","Line key updates - KOMSAKY","Anna Elzen Koshy","3/25/2026 15:36:00","35.73"]
+const RAW = [
+["Completed","Sidhu G","1/22/2026","Paradigm ROS","DENTAL","CS Voicestack","","","",""],
+["Completed","Sidhu G","1/27/2026 5:47:00","Paradigm VASA","DENTAL","CS Voicestack","1/27/2026 22:40:00","1/28/2026","16.88",""],
+["Completed","Sidhu G","2/10/2026 6:55:00","Paradigm - ODIOS","DENTAL","CS Voicestack","2/10/2026 22:17:00","2/11/2026","15.37",""],
+["Completed","Sidhu G","2/11/2026 5:10:00","Paradigm - ASA","DENTAL","CS Voicestack","2/11/2026 19:53:00","2/12/2026","14.72",""],
+["Completed","Sidhu G","2/14/2026 6:39:00","Paradigm - POSNJ","DENTAL","CS Voicestack","2/15/2026 19:15:00","2/18/2026","36.60",""],
+["Completed","Sidhu G","2/14/2026 6:35:00","Paradigm - SOFS","DENTAL","CS Voicestack","2/17/2026 20:26:00","2/18/2026","85.85",""],
+["Completed","Karthik Mohan","2/20/2026 6:28:00","Paradigm - OFRS","DENTAL","CS Voicestack","2/23/2026 14:13:00","2/24/2026","79.75",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","2/20/2026 6:33:00","Paradigm - COFSNJ","DENTAL","CS Voicestack","2/26/2026 19:34:00","2/26/2026","157.02",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","2/21/2026 5:39:00","Paradigm - SBOMS","DENTAL","CS Voicestack","2/25/2026 1:52:00","2/25/2026","92.22",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","2/21/2026 5:27:00","Paradigm - OKDIOS","DENTAL","CS Voicestack","2/24/2026 1:42:00","2/24/2026","68.25",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","2/24/2026 4:32:00","Paradigm - SNDIOS","DENTAL","CS Voicestack","2/25/2026 21:41:00","2/26/2026","41.15",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","3/3/2026 5:54:00","Paradigm - Columbia Basin OMS","DENTAL","CS Voicestack","3/3/2026 19:00:00","3/4/2026","13.10",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","3/3/2026 15:52:00","Paradigm - WOSG","DENTAL","CS Voicestack","3/3/2026 21:02:00","3/4/2026","5.17",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan, Sidhu G","3/3/2026 22:16:00","Paradigm - YOMS","DENTAL","CS Voicestack","3/4/2026 22:30:00","3/5/2026","24.23",""],
+["Completed","Achu Dev","3/9/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","48.00","Braintree"],
+["Completed","Achu Dev","3/11/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","0.00","Crompton"],
+["Completed","Achu Dev","3/9/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","48.00","Metrowest"],
+["Completed","Achu Dev","3/9/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","48.00","Framingham"],
+["Completed","Achu Dev","3/9/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","48.00","Attleboro"],
+["Completed","Achu Dev","3/9/2026","Passion Dental","DENTAL","CS Voicestack","3/11/2026","","48.00","Peabody"],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Abishek Mohan","3/10/2026 14:50:00","Paradigm - TPG","DENTAL","CS Voicestack","3/11/2026 16:30:00","3/11/2026","25.67","The Perico Group"],
+["Completed","Milan Abraham","3/10/2026 5:51:00","Highfive","DENTAL","CS Voicestack","3/11/2026 1:19:00","3/11/2026","19.47","SEOAL-Dothan"],
+["Completed","Karthik Mohan, Milan Abraham, Abishek Mohan, Achu Dev, Jabir R H","3/16/2026 6:27:00","Highfive","DENTAL","CS Voicestack","3/17/2026 1:49:00","3/17/2026","19.37","Oral Surgery Associates - Gadsen"],
+["Completed","Achu Dev, Abishek Mohan","3/18/2026 2:43:00","Paradigm - SFDIOS VoiceStack","DENTAL","CS Voicestack","3/19/2026 2:02:00","3/19/2026","23.32","SFDIOS"],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Jabir R H, Abishek Mohan","3/18/2026 6:42:00","Paradigm Headquarters","DENTAL","CS Voicestack","3/19/2026 2:50:00","3/18/2026","20.13","Paradigm HQ"],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Jabir R H, Abishek Mohan","3/19/2026 19:21:00","Paradigm - KOMSAKY","DENTAL","CS Voicestack","3/20/2026 3:00:00","3/20/2026","7.65",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Jabir R H, Abishek Mohan","3/30/2026 20:18:00","Paradigm - ASA Concord","DENTAL","CS Voicestack","4/1/2026 3:42:00","","31.40",""],
+["Completed","Karthik Mohan, Achu Dev, Milan Abraham, Jabir R H, Abishek Mohan, Sidhu G","3/30/2026","Paradigm - COMS","DENTAL","CS Voicestack","4/2/2026 14:30:00","","86.50",""]
 ];
 
-function pd(s){if(!s||!s.trim())return null;const d=new Date(s.trim());return isNaN(d)?null:d;}
-function fd(s){const d=pd(s);if(!d)return'—';return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-function getSpecs(s){return s.split(',').map(x=>x.trim()).filter(Boolean);}
-function ini(n){const p=n.trim().split(' ');return(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
+function parseDate(s){
+  if(!s||!s.trim())return null;
+  const d=new Date(s.trim().replace(' AM','').replace(' PM',''));
+  return isNaN(d)?null:d;
+}
+function fmtDate(s){
+  const d=parseDate(s);
+  if(!d)return'—';
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function getSpecialists(s){
+  return s.split(',').map(x=>x.trim()).filter(Boolean);
+}
+function initials(name){
+  const p=name.trim().split(' ');
+  return(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+}
 
 const records=RAW.map(r=>({
-  status:r[0],specialistRaw:r[1],specialists:getSpecs(r[1]),
-  timestamp:r[2],client:r[3],requirement:r[4].replace(/\n/g,'').trim(),
-  requestedBy:r[5],completionDate:r[6],hours:r[7]?parseFloat(r[7]):null
+  status:r[0],
+  specialistRaw:r[1],
+  specialists:getSpecialists(r[1]),
+  timestamp:r[2],
+  client:r[3],
+  market:r[4],
+  env:r[5],
+  completionDateRaw:r[6],
+  implementedDateRaw:r[7],
+  hours:r[8]?parseFloat(r[8]):null,
+  location:r[9]
 }));
 
 const completed=records.filter(r=>r.status==='Completed').length;
 const inprogress=records.filter(r=>r.status==='In Progress').length;
-const withH=records.filter(r=>r.hours&&r.hours>0);
-const totalH=withH.reduce((a,r)=>a+r.hours,0);
-const avgH=withH.length?totalH/withH.length:0;
-const maxH=Math.max(...records.map(r=>r.hours||0));
+const totalHours=records.reduce((a,r)=>a+(r.hours||0),0);
+const withHours=records.filter(r=>r.hours&&r.hours>0);
+const avgHours=withHours.length?totalHours/withHours.length:0;
+const allSpecs=[...new Set(records.flatMap(r=>r.specialists))].sort();
 
 document.getElementById('metrics').innerHTML=`
-<div class="metric-card"><div class="metric-label">Total requests</div><div class="metric-value">${records.length}</div><div class="metric-sub">Q1 2026</div></div>
+<div class="metric-card"><div class="metric-label">Total onboardings</div><div class="metric-value">${records.length}</div><div class="metric-sub">Q1 2026</div></div>
 <div class="metric-card"><div class="metric-label">Completed</div><div class="metric-value" style="color:#1D9E75">${completed}</div><div class="metric-sub">${Math.round(completed/records.length*100)}% of total</div></div>
-<div class="metric-card"><div class="metric-label">In progress</div><div class="metric-value" style="color:#BA7517">${inprogress}</div><div class="metric-sub">${inprogress?Math.round(inprogress/records.length*100):0}% of total</div></div>
-<div class="metric-card"><div class="metric-label">Avg completion time</div><div class="metric-value">${avgH.toFixed(1)}h</div><div class="metric-sub">across all requests</div></div>
+<div class="metric-card"><div class="metric-label">In progress</div><div class="metric-value" style="color:#BA7517">${inprogress}</div><div class="metric-sub">${Math.round(inprogress/records.length*100)}% of total</div></div>
+<div class="metric-card"><div class="metric-label">Avg setup time</div><div class="metric-value">${avgHours.toFixed(1)}h</div><div class="metric-sub">per onboarding</div></div>
 `;
 
 const pctC=Math.round(completed/records.length*100);
-const pctI=Math.round(inprogress/records.length*100)||0;
+const pctI=Math.round(inprogress/records.length*100);
 document.getElementById('status-bars').innerHTML=`
-<div class="bar-wrap"><div class="bar-label"><span>Completed</span><span>${completed} (${pctC}%)</span></div><div class="bar-bg"><div class="bar-fill" style="width:${pctC}%;background:#1D9E75"></div></div></div>
-<div class="bar-wrap" style="margin-top:10px"><div class="bar-label"><span>In progress</span><span>${inprogress} (${pctI}%)</span></div><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(pctI,0)}%;background:#EF9F27"></div></div></div>
-`;
-document.getElementById('donut-legend').innerHTML=`
-<div class="leg-item"><span class="leg-dot" style="background:#1D9E75"></span>Completed: ${completed}</div>
-<div class="leg-item"><span class="leg-dot" style="background:#EF9F27"></span>In progress: ${inprogress}</div>`;
+<div class="status-bar-wrap">
+  <div class="status-label"><span>Completed</span><span>${completed} (${pctC}%)</span></div>
+  <div class="bar-bg"><div class="bar-fill bar-completed" style="width:${pctC}%"></div></div>
+</div>
+<div class="status-bar-wrap" style="margin-top:10px">
+  <div class="status-label"><span>In progress</span><span>${inprogress} (${pctI||0}%)</span></div>
+  <div class="bar-bg"><div class="bar-fill bar-inprogress" style="width:${Math.max(pctI,0)}%"></div></div>
+</div>`;
 
-const allSpecs=[...new Set(records.flatMap(r=>r.specialists))].sort();
-const sf=document.getElementById('spec-filter');
-allSpecs.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sf.appendChild(o);});
+document.getElementById('donut-legend').innerHTML=`
+<div class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Completed: ${completed}</div>
+<div class="legend-item"><span class="legend-dot" style="background:#EF9F27"></span>In progress: ${inprogress}</div>`;
+
+const specFilter=document.getElementById('spec-filter');
+allSpecs.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;specFilter.appendChild(o);});
 
 function renderTable(){
-  const sv=document.getElementById('spec-filter').value;
-  const stv=document.getElementById('status-filter').value;
-  const rows=records.filter(r=>(!sv||r.specialists.includes(sv))&&(!stv||r.status===stv));
-  document.getElementById('tbody').innerHTML=rows.map(r=>{
-    const tags=r.specialists.map(s=>`<span class="spec-tag">${s}</span>`).join('');
-    const bw=r.hours?Math.round(r.hours/maxH*50):0;
-    const hd=r.hours!=null?`${r.hours.toFixed(2)}<span class="h-bar" style="width:${bw}px"></span>`:'—';
-    const bc=r.status==='Completed'?'badge-c':'badge-ip';
+  const sf=document.getElementById('spec-filter').value;
+  const stf=document.getElementById('status-filter').value;
+  let rows=records.filter(r=>{
+    const specMatch=!sf||r.specialists.includes(sf);
+    const statMatch=!stf||r.status===stf;
+    return specMatch&&statMatch;
+  });
+  const maxH=Math.max(...rows.filter(r=>r.hours).map(r=>r.hours),1);
+  document.getElementById('table-body').innerHTML=rows.map(r=>{
+    const tags=r.specialists.map(s=>`<span class="specialist-tag">${s}</span>`).join('');
+    const bw=r.hours?Math.round(r.hours/maxH*60):0;
+    const hrsDisplay=r.hours!=null?`${r.hours.toFixed(2)}<span class="hours-bar" style="width:${bw}px"></span>`:'—';
+    const badge=r.status==='Completed'?'badge-completed':'badge-inprogress';
     return`<tr>
-      <td style="font-weight:500">${r.client}</td>
-      <td style="max-width:180px;color:var(--color-text-secondary)">${r.requirement}</td>
-      <td><span class="badge ${bc}">${r.status}</span></td>
-      <td><div style="display:flex;flex-wrap:wrap">${tags}</div></td>
-      <td style="white-space:nowrap">${fd(r.timestamp)}</td>
-      <td style="white-space:nowrap">${fd(r.completionDate)}</td>
-      <td style="white-space:nowrap">${hd}</td>
-      <td style="color:var(--color-text-secondary)">${r.requestedBy}</td>
+      <td style="font-weight:500;max-width:160px">${r.client}</td>
+      <td><span class="badge ${badge}">${r.status}</span></td>
+      <td><div class="spec-cell">${tags}</div></td>
+      <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
+      <td style="white-space:nowrap">${r.completionDateRaw?fmtDate(r.completionDateRaw):(r.implementedDateRaw?fmtDate(r.implementedDateRaw):'—')}</td>
+      <td style="white-space:nowrap">${hrsDisplay}</td>
+      <td>${r.market||'—'}</td>
+      <td style="max-width:120px;color:var(--color-text-secondary)">${r.location||'—'}</td>
     </tr>`;
   }).join('');
 }
 renderTable();
 
 function renderSpecTable(){
-  const sm={};
-  records.forEach(r=>r.specialists.forEach(s=>{
-    if(!sm[s])sm[s]={cnt:0,sum:0,clients:new Set()};
-    sm[s].cnt++;if(r.hours)sm[s].sum+=r.hours;
-    sm[s].clients.add(r.client);
-  }));
-  document.getElementById('spec-tbody').innerHTML=Object.entries(sm).sort((a,b)=>b[1].cnt-a[1].cnt).map(([n,d])=>`<tr>
-    <td style="font-weight:500;display:flex;align-items:center"><span class="avatar">${ini(n)}</span>${n}</td>
-    <td>${d.cnt}</td><td>${d.cnt?(d.sum/d.cnt).toFixed(2):0}h</td>
-    <td>${d.sum.toFixed(2)}h</td>
-    <td style="color:var(--color-text-secondary);font-size:12px">${[...d.clients].join(', ')}</td>
-  </tr>`).join('');
+  const specMap={};
+  records.forEach(r=>{
+    r.specialists.forEach(s=>{
+      if(!specMap[s])specMap[s]={count:0,totalH:0,clients:new Set()};
+      specMap[s].count++;
+      if(r.hours)specMap[s].totalH+=r.hours;
+      specMap[s].clients.add(r.client);
+    });
+  });
+  const rows=Object.entries(specMap).sort((a,b)=>b[1].count-a[1].count);
+  document.getElementById('spec-table-body').innerHTML=rows.map(([name,d])=>{
+    const avg=d.count?d.totalH/d.count:0;
+    return`<tr>
+      <td style="font-weight:500;display:flex;align-items:center"><span class="spec-avatar">${initials(name)}</span>${name}</td>
+      <td>${d.count}</td>
+      <td>${avg.toFixed(2)}h</td>
+      <td>${d.totalH.toFixed(2)}h</td>
+      <td style="color:var(--color-text-secondary);font-size:12px">${[...d.clients].join(', ')}</td>
+    </tr>`;
+  }).join('');
 }
 renderSpecTable();
 
-function switchTab(t,e){
+function switchTab(t){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');
+  event.target.classList.add('active');
   document.getElementById('list-view').style.display=t==='list'?'block':'none';
   document.getElementById('list-filters').style.display=t==='list'?'flex':'none';
-  document.getElementById('spec-view').style.display=t==='specialist'?'block':'none';
+  document.getElementById('specialist-view').style.display=t==='specialist'?'block':'none';
 }
 
 const specAvg={};
-records.forEach(r=>r.specialists.forEach(s=>{
-  if(!specAvg[s])specAvg[s]={sum:0,cnt:0};
-  if(r.hours){specAvg[s].sum+=r.hours;specAvg[s].cnt++;}
-}));
+records.forEach(r=>{
+  r.specialists.forEach(s=>{
+    if(!specAvg[s])specAvg[s]={sum:0,cnt:0};
+    if(r.hours){specAvg[s].sum+=r.hours;specAvg[s].cnt++;}
+  });
+});
 const avgData=Object.entries(specAvg).map(([n,d])=>({name:n,avg:d.cnt?d.sum/d.cnt:0})).sort((a,b)=>b.avg-a.avg);
 
 setTimeout(()=>{
   new Chart(document.getElementById('donutChart'),{
     type:'doughnut',
     data:{labels:['Completed','In Progress'],datasets:[{data:[completed,Math.max(inprogress,0)],backgroundColor:['#1D9E75','#EF9F27'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw}`}}}}
   });
+
   const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
-  const tc=isDark?'#B4B2A9':'#5F5E5A';
-  const gc=isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
-  const bh=Math.max(avgData.length*38+60,180);
-  document.querySelector('.avg-wrap').style.height=bh+'px';
+  const textCol=isDark?'#B4B2A9':'#5F5E5A';
+  const gridCol=isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+  const barH=Math.max(avgData.length*44+60,200);
+  document.querySelector('.avg-chart-wrap').style.height=barH+'px';
   new Chart(document.getElementById('avgChart'),{
     type:'bar',
-    data:{labels:avgData.map(d=>d.name),datasets:[{label:'Avg hrs',data:avgData.map(d=>parseFloat(d.avg.toFixed(2))),backgroundColor:'#5DCAA5',borderRadius:4,borderSkipped:false}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    data:{
+      labels:avgData.map(d=>d.name),
+      datasets:[{label:'Avg hours',data:avgData.map(d=>parseFloat(d.avg.toFixed(2))),backgroundColor:'#5DCAA5',borderRadius:4,borderSkipped:false}]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw.toFixed(2)} hrs avg`}}},
-      scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:11}},title:{display:true,text:'Average hours',color:tc,font:{size:11}}},y:{grid:{display:false},ticks:{color:tc,font:{size:11},autoSkip:false}}}
+      scales:{
+        x:{grid:{color:gridCol},ticks:{color:textCol,font:{size:11}},title:{display:true,text:'Average hours',color:textCol,font:{size:11}}},
+        y:{grid:{display:false},ticks:{color:textCol,font:{size:11},autoSkip:false}}
+      }
     }
   });
-},120);
+},100);
 </script>
